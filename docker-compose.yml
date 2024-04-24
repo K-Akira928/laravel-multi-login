@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   l10dev-nginx:
     container_name: "l10dev-nginx"
