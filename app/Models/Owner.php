@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Owner extends Authenticatable
 {
-  use HasApiTokens, HasFactory, Notifiable;
+  use HasApiTokens, HasFactory, Notifiable, softDeletes;
 
   /**
    * The attributes that are mass assignable.
