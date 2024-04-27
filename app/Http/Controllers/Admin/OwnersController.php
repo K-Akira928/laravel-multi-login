@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Owner;
+use Illuminate\Support\Facades\DB;
 
 class OwnersController extends Controller
 {
@@ -17,7 +19,10 @@ class OwnersController extends Controller
    */
   public function index()
   {
-    dd('オーナ一覧です');
+    $e_all = Owner::all();
+    $q_get = DB::table('owners')->select('name', 'created_at')->get();
+
+    return view('admin.owners.index', compact('e_all', 'q_get'));
   }
 
   /**
