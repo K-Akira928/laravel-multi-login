@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UploadImageRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use App\Services\ImageService;
 
 use App\Models\Shop;
 
@@ -48,19 +51,22 @@ class ShopController extends Controller
    */
   public function edit(string $id)
   {
+    $shop = Shop::findOrFail($id);
+
+    return view('owner.shops.edit', compact('shop'));
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $id)
+  public function update(UploadImageRequest $request, string $id)
   {
-    $owner = Owner::findOrFail($id);
-    $owner->name = $request->name;
-    $owner->email = $request->email;
-    $owner->password = Hash::make($request->password);
-    $owner->save();
+    $imageFile = $request->image;
 
-    return redirect()->route('admin.owners.index')->with(['message' => 'オーナー情報を更新しました', 'status' => 'info']);
+    if (!is_null($imageFile) && $imageFile->isValid()) {
+      $fileNameToStore = ImageService::upload($imageFile, 'shops');
+    }
+
+    return redirect()->route('owner.shops.index');
   }
 }
