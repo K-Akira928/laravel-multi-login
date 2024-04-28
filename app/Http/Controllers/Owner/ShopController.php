@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Shop;
 
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 class ShopController extends Controller
 {
   public function __construct()
@@ -61,7 +64,14 @@ class ShopController extends Controller
   {
     $imageFile = $request->image;
     if (!is_null($imageFile) && $imageFile->isValid()) {
-      Storage::putFile('public/shops', $imageFile);
+      $manager = new ImageManager(new Driver());
+      $redizedImage = $manager->read($imageFile)->resize(1920, 1080)->encode();
+
+      $fileName = uniqid(rand() . '_');
+      $extension = $imageFile->extension();
+      $fileNameToStore = $fileName . '.' . $extension;
+
+      Storage::put('public/shops/' . $fileNameToStore, $redizedImage);
     }
 
     return redirect()->route('owner.shops.index');
