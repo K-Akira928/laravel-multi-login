@@ -22,6 +22,20 @@ return new class extends Migration
       $table->foreignId('image1')
         ->nullable()
         ->constrained('images');
+      $table->foreignId('image2')
+        ->nullable()
+        ->constrained('images');
+      $table->foreignId('image3')
+        ->nullable()
+        ->constrained('images');
+      $table->foreignId('image4')
+        ->nullable()
+        ->constrained('images');
+      $table->string('name');
+      $table->text('infomation');
+      $table->unsignedInteger('price');
+      $table->boolean('is_selling');
+      $table->integer('sort_order')->nullable();
       $table->timestamps();
     });
   }
