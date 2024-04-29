@@ -33,8 +33,25 @@
                   class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">更新</button>
               </div>
             </form>
+            <form id="delete_{{ $image->id }}" method="POST"
+              action="{{ route('owner.images.destroy', ['image' => $image->id]) }}">
+              @csrf
+              @method('delete')
+              <div class="w-full">
+                <a href="#" data-id="delete_{{ $image->id }}" onclick=deletePost(this)
+                  class="mt-4 block text-center text-white bg-red-400 border-0 py-2 focus:outline-none hover:bg-red-500 rounded text-lg">削除</a>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      function deletePost(e) {
+        'use strict';
+        if (confirm('本当に削除してもよろしいですか？')) {
+          document.getElementById(e.dataset.id).submit();
+        }
+      }
+    </script>
 </x-app-layout>
