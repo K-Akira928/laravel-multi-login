@@ -42,7 +42,7 @@
               </div>
               <div class="w-full flex justify-center">
                 <div class="w-11/12">
-                  <x-shop-thumbnail :filename="$shop->filename" />
+                  <x-thumbnail :filename="$shop->filename" type="shops" />
                 </div>
               </div>
               <div>

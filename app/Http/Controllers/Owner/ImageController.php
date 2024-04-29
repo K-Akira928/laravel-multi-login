@@ -3,63 +3,90 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+  public function __construct()
+  {
+    $this->middleware('auth:owners');
+    $this->middleware(function ($request, $next) {
+      $id = $request->route()->parameter('image');
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+      if (is_null($id)) {
+        return $next($request);
+      }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+      $imagesOwnerId = Image::findOrFail($id)->owner->id;
+      $imageId = (int)$imagesOwnerId;
+      $ownerId = Auth::id();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+      if ($imageId === $ownerId) {
+        return $next($request);
+      }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+      abort(404);
+    });
+  }
+  /**
+   * Display a listing of the resource.
+   */
+  public function index()
+  {
+    $images = Image::where('owner_id', Auth::id())
+      ->orderby('updated_at', 'desc')
+      ->paginate(20);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    return view('owner.images.index', compact('images'));
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+  /**
+   * Show the form for creating a new resource.
+   */
+  public function create()
+  {
+    //
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   */
+  public function store(Request $request)
+  {
+    //
+  }
+
+  /**
+   * Display the specified resource.
+   */
+  public function show(string $id)
+  {
+    //
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   */
+  public function edit(string $id)
+  {
+    //
+  }
+
+  /**
+   * Update the specified resource in storage.
+   */
+  public function update(Request $request, string $id)
+  {
+    //
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   */
+  public function destroy(string $id)
+  {
+    //
+  }
 }
