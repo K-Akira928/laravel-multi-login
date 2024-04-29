@@ -1,0 +1,161 @@
+<x-app-layout>
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+      店舗情報編集
+    </h2>
+  </x-slot>
+
+  <div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6 text-gray-900">
+          <div class="flex flex-col text-center w-full mb-12">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">店舗情報編集</h1>
+          </div>
+          <div class="lg:w-1/2 md:w-2/3 mx-auto">
+            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+            <form method="POST" action="{{ route('owner.products.update', ['product' => $product->id]) }}">
+              @csrf
+              @method('put')
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <label for="name" class="leading-7 text-sm text-gray-600">商品名</label>
+                  <input type="text" id="name" name="name" value="{{ $product->name }}" required
+                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                  <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                </div>
+              </div>
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <label for="infomation" class="leading-7 text-sm text-gray-600">商品情報</label>
+                  <textarea id="infomation" name="infomation" value="" required rows="10"
+                    class="resize-none w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">{{ $product->infomation }}</textarea>
+                  <x-input-error :messages="$errors->get('infomation')" class="mt-2" />
+                </div>
+              </div>
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <label for="price" class="leading-7 text-sm text-gray-600">商品価格</label>
+                  <input type="number" id="price" name="price" value="{{ $product->price }}" required
+                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                  <x-input-error :messages="$errors->get('price')" class="mt-2" />
+                </div>
+              </div>
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <label for="sort_order" class="leading-7 text-sm text-gray-600">表示順</label>
+                  <input type="number" id="sort_order" name="sort_order" value="{{ $product->sort_order }}" required
+                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                  <x-input-error :messages="$errors->get('sort_order')" class="mt-2" />
+                </div>
+              </div>
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <label for="current_quantity" class="leading-7 text-sm text-gray-600">現在の在庫</label>
+                  <input type="hidden" id="current_quantity" name="current_quantity" value="{{ $quantity }}"
+                    required>
+                  <div class="w-full bg-gray-100 bg-opacity-50 rounded">{{ $quantity }}</div>
+                </div>
+              </div>
+              <div>
+                <div class="p-2 flex justify-around">
+                  <div>
+                    <input type="radio" name="type" value="1" checked>追加
+                  </div>
+                  <div>
+                    <input type="radio" name="type" value="2">削減
+                  </div>
+                </div>
+              </div>
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <label for="quantity" class="leading-7 text-sm text-gray-600">数量</label>
+                  <input type="number" id="quantity" name="quantity" value="0" required
+                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                  <x-input-error :messages="$errors->get('quantity')" class="mt-2" />
+                </div>
+              </div>
+              <div class="p-2 w-full">
+                <div class="relative">
+                  <div class="grid grid-cols-2 gap-4 my-4 pb-2">
+                    <div class="flex flex-col">
+                      <label for="category" class="leading-7 text-sm text-gray-600">カテゴリー</label>
+                      <select class="border p-2 rounded-md" name="category">
+                        @foreach ($categories as $category)
+                          <optgroup label="{{ $category->name }}">
+                            @foreach ($category->secondary as $secondary)
+                              <option value="{{ $secondary->id }}" @if ($secondary->id === $product->secondary_category_id) selected @endif>
+                                {{ $secondary->name }}
+                              </option>
+                            @endforeach
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="flex flex-col">
+                      <label for="shop_id" class="leading-7 text-sm text-gray-600">販売する店舗</label>
+                      <select class="border p-2 rounded-md" name="shop_id">
+                        @foreach ($shops as $shop)
+                          <option value="{{ $shop->id }}" @if ($shop->id === $product->shop->id) selected @endif>
+                            {{ $shop->name }}
+                          </option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+                  <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                </div>
+                <div class="p-2 w-full">
+                  <x-select-image :images="$images" currentId="{{ $product->image1 }}"
+                    currentImage="{{ $product->imageFirst->filename ?? '' }}" name="image1" />
+
+                  <x-select-image :images="$images" currentId="{{ $product->image2 }}"
+                    currentImage="{{ $product->imageSecond->filename ?? '' }}" name="image2" />
+
+                  <x-select-image :images="$images" currentId="{{ $product->image3 }}"
+                    currentImage="{{ $product->imageThird->filename ?? '' }}" name="image3" />
+
+                  <x-select-image :images="$images" currentId="{{ $product->image4 }}"
+                    currentImage="{{ $product->imageFourth->filename ?? '' }}" name="image4" />
+                </div>
+              </div>
+              <div>
+                <div class="p-2 flex justify-around">
+                  <div>
+                    <input type="radio" name="is_selling" value="1"
+                      @if ($product->is_selling === 1) checked @endif>販売中
+                  </div>
+                  <div>
+                    <input type="radio" name="is_selling" value="0"
+                      @if ($product->is_selling === 0) checked @endif>停止中
+                  </div>
+                </div>
+              </div>
+              <div class="p-2 w-full mt-4 flex justify-around">
+                <button type="button" onclick="location.href='{{ route('owner.products.index') }}'"
+                  class="text-white bg-gray-300 border-0 py-2 px-8 focus:outline-none hover:bg-gray-400 rounded text-lg">戻る</button>
+                <button type="submit"
+                  class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">更新</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      'use strict'
+      const images = document.querySelectorAll('.image')
+
+      images.forEach(image => {
+        image.addEventListener('click', function(e) {
+          const imageName = e.target.dataset.id.substr(0, 6)
+          const imageId = e.target.dataset.id.replace(imageName + '_', '')
+          const imageFile = e.target.dataset.file
+          const imagePath = e.target.dataset.path
+          const modal = e.target.dataset.modal
+          document.getElementById(imageName + '_thumbnail').src = imagePath + '/' + imageFile
+          document.getElementById(imageName + '_hidden').value = imageId
+          MicroModal.close(modal);
+        }, )
+      })
+    </script>
+</x-app-layout>
