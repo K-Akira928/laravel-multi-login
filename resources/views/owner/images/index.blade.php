@@ -16,21 +16,23 @@
             <button onclick="location.href='{{ route('owner.images.create') }}'"
               class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-sm">画像新規登録</button>
           </div>
-          <div class="grid grid-cols-4">
+          <div class="grid grid-cols-4 gap-6">
             @foreach ($images as $image)
-              <div class="p-4">
+              <div>
                 <a href="{{ route('owner.images.edit', ['image' => $image->id]) }}">
                   <div class="border rounded-md p-4">
-                    <div class="text-xl">
+                    <x-thumbnail :filename="$image->filename" type="products" />
+                    <div class="text-gray-700">
                       {{ $image->title }}
                     </div>
-                    <x-thumbnail :filename="$image->filename" type="products" />
                   </div>
                 </a>
               </div>
             @endforeach
           </div>
-          {{ $images->links() }}
+          <div class="py-4">
+            {{ $images->links() }}
+          </div>
         </div>
       </div>
     </div>
