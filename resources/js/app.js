@@ -1,6 +1,12 @@
-import './bootstrap';
+import MicroModal from "micromodal";
 
-import Alpine from 'alpinejs';
+import "./bootstrap";
+
+import Alpine from "alpinejs";
+
+MicroModal.init({
+  disableScroll: true,
+});
 
 window.Alpine = Alpine;
 
