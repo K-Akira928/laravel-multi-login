@@ -10,11 +10,17 @@ class ImageService
 {
   public static function upload($imageFile, $folderName)
   {
+    if (is_array($imageFile)) {
+      $file = $imageFile['image'];
+    } else {
+      $file = $imageFile;
+    }
+
     $manager = new ImageManager(new Driver());
-    $redizedImage = $manager->read($imageFile)->resize(1920, 1080)->encode();
+    $redizedImage = $manager->read($file)->resize(1920, 1080)->encode();
 
     $fileName = uniqid(rand() . '_');
-    $extension = $imageFile->extension();
+    $extension = $file->extension();
     $fileNameToStore = $fileName . '.' . $extension;
 
     Storage::put('public/' . $folderName . '/' . $fileNameToStore, $redizedImage);
