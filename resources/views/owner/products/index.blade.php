@@ -21,9 +21,12 @@
               @foreach ($owner->shop->product as $product)
                 <div>
                   <a href="{{ route('owner.products.edit', ['product' => $product->id]) }}">
-                    <div class="border rounded-md p-4">
-                      <x-thumbnail :filename="$product->imageFirst->filename" type="products" />
+                    <div class="border rounded-md pt-4 px-4 text-center">
+                      <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
                       <div class="text-gray-700">
+                      </div>
+                      <div class="py-4">
+                        <span class="text-gray-700">{{ $product->name }}</span>
                       </div>
                     </div>
                   </a>
