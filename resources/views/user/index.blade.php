@@ -17,9 +17,9 @@
               <div>
                 <a href="#">
                   <div class="border rounded-md pt-4 px-4 text-center">
-                    <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
+                    <x-thumbnail filename="{{ $product->filename ?? '' }}" type="products" />
                     <div class="mt-4">
-                      <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ $product->category->name }}
+                      <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">{{ $product->category }}
                       </h3>
                       <h2 class="text-gray-900 title-font text-lg font-medium">{{ $product->name }}</h2>
                       <p class="mt-1">{{ number_format($product->price) }}<span
