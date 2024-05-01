@@ -15,7 +15,7 @@
           <div class="grid grid-cols-4 gap-6">
             @foreach ($products as $product)
               <div>
-                <a href="#">
+                <a href="{{ route('user.items.show', ['item' => $product->id]) }}">
                   <div class="border rounded-md pt-4 px-4 text-center">
                     <x-thumbnail filename="{{ $product->filename ?? '' }}" type="products" />
                     <div class="mt-4">
